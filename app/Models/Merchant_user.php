@@ -57,10 +57,10 @@ public function __construct($user = null) {
 
     public function userdaftar2(Request $request){
 
-        $merchant_address = $request->post('merchant_address', true);
-        $merchant_kelurahan = $request->post('merchant_kelurahan', true);
-        $session_id = $request->post('session_id', true);
-        $zip_code = $request->post('zip_code', true);
+        $merchant_address = $request->post('merchant_address');
+        $merchant_kelurahan = $request->post('merchant_kelurahan');
+        $session_id = $request->post('session_id');
+        $zip_code = $request->post('zip_code');
 
         //$idpaket = $this->getIdPaket($paket);
 
@@ -76,11 +76,11 @@ public function __construct($user = null) {
 			//$this->db->where('session_id',$session_id);
             //$this->db->update('merchant_user', $data);
 			
-			$updated=DB::table('merchant_user')->where('session_id',$session_id)->update(
+			$updated=DB::table('merchant_user')->where('session_id',$session_id)->updateorignore(
 			$data
 			);
 			
-            return ($updated->count() != 1) ? false : true;
+            return ($updated != 1) ? false : true;
 //        }else {
 //            return false;
 //        }
@@ -88,20 +88,22 @@ public function __construct($user = null) {
     }
     public function userdaftar3(Request $request){
 
-        $phone_number = $request->post('phone_number', true);
-        $user_name = $request->post('user_name', true);
-        $session_id = $request->post('session_id', true);
-        $email = $request->post('email', true);
-		$login_password = $request->post('login_password',true);
+        $phone_number = $request->post('phone_number');
+        $user_name = $request->post('user_name');
+        $session_id = $request->post('session_id');
+        $email = $request->post('email');
+		$login_password = $request->post('login_password');
 		$id=0;
 
-        $this->db->where('session_id', $session_id);
-        $q = $this->db->get("merchant_user");
+        $q = DB::table("merchant_user")->get()->where('session_id', $session_id);
 
-        if( $q->num_rows() ) 
+        if( $q ) 
         {
-            $data=$q->result_array();
-			$id =$data[0]['merchant_id'];
+			foreach ($q as $each) {
+				//echo $user->name;
+				$id =$each->merchant_id;
+			}            //$data=$q->result_array();
+			
         }else{
             $id=0;
         }
@@ -114,10 +116,10 @@ public function __construct($user = null) {
 				'login_password' => md5($login_password),
 				'merchant_user'=>$id
             );
-					$inserted = DB::table('merchant_user')->insert(
+					$inserted = DB::table('merchant_login')->insertorignore(
 					$data
 					);
-            return ($inserted->count() != 1) ? false : true;
+            return ($inserted != 1) ? false : true;
 
     }
     public function userdaftar4(){

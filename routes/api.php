@@ -18,7 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('daftar1', array( 'uses' => 'Merchant_userController@store'));
+Route::post('daftar', array( 'uses' => 'Merchant_userController@store'));
 Route::post('daftar2', array( 'uses' => 'Merchant_userController@store2'));
 Route::post('daftar3', array('uses' => 'Merchant_userController@store3'));
+
+Route::post('province', array('uses' => 'ProvinceController@store'));
+Route::post('kabupaten', array('uses' => 'KabupatenController@store'));
+Route::post('kecamatan', array('uses' => 'KecamatanController@store'));
+Route::post('kelurahan', array('uses' => 'KelurahanController@store'));
+
+Route::post('businesstype', array('uses' => 'BusinessTypeController@store'));
 
