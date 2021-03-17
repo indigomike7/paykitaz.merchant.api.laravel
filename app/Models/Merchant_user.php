@@ -38,7 +38,8 @@ public function __construct($user = null) {
                 'store_close'=>$store_close,
                 'merchant_type' => $merchant_type,
                 'featured_photo' => $namafiledidb,
-				'session_id'=>session()->getId()
+				'session_id'=>session()->getId(),
+				'registered_date'=>date("Y-m-d H:i:s"),
             );
 			//$inserted = DB::getInstance();
 					$inserted=DB::table('merchant_user')->insertOrIgnore($data);
@@ -114,7 +115,8 @@ public function __construct($user = null) {
                 'user_name' => $user_name,
                 'email' => $email,
 				'login_password' => md5($login_password),
-				'merchant_user'=>$id
+				'merchant_user'=>$id,
+				'registered_date'=>date("Y-m-d H:i:s"),
             );
 					$inserted = DB::table('merchant_login')->insertorignore(
 					$data
