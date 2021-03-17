@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
-class User extends Authenticatable
+use Laravel\Sanctum\HasApiTokens;
+use DB;
+use App\Quotation;
+class Merchant_login extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use  HasApiTokens, HasFactory, Notifiable;
+	    protected $table = 'merchant_login';
 
     /**
      * The attributes that are mass assignable.
@@ -17,9 +20,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+		'phone_number',
+        'user_name',
         'email',
-        'password',
+        'login_password',
     ];
 
     /**
@@ -28,7 +32,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
+        'login_password',
         'remember_token',
     ];
 
@@ -40,4 +44,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+	/*
+	public function __construct()
+	{
+		return DB::table('merchant_login');
+	}
+	*/
 }

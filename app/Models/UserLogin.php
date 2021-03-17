@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use DB;
 use App\Quotation;
+use HasApiTokens;
 
 class UserLogin extends Model
 {
@@ -26,14 +27,8 @@ public function __construct($user = null) {
 		$phone_number=$request->post('phone_number');
 		$login_password=$request->post('login_password');
 			$login=DB::table('merchant_login')->where('phone_number',$phone_number)->where('login_password',md5($login_password))->get();
-			
-		$data=array();
-		foreach ($login as $each)
-		{
-			$data[]=$each;
-		}
         if(count($login) > 0){
-            return $data;
+            return $login;
         }
         else {
             return false;

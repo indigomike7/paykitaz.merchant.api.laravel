@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Merchant_user;
 use App\Models\UserLogin;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Merchant_login;
+use Illuminate\Support\Facades\Auth;
+
 
 class Merchant_userController extends Controller
 {
@@ -125,24 +129,34 @@ class Merchant_userController extends Controller
 	
     public function store4(Request $request)
     {
-		$mu = new UserLogin; 
-        $mu = $mu->user_login($request);
+		$ul = new UserLogin; 
+		
+        //$mu = $ul->user_login($request);
+		$phone_number = $request->post('phone_number');
+		$login_password = $request->post('login_password');
+		$mu = Merchant_login::where('phone_number' , $phone_number)
+					  ->where( 'login_password' , md5($login_password))->first();
 
+			//$mu = $ul->user_login($request);
+			//die(print_r($mu));
           if ($mu)
           {
                 // Generate Token
-                $token_data['login_id'] = $mu->login_id;
+				//$data=array();
+					$token_data['login_id'] = $mu->login_id;
+					$token_data['user_name'] = $mu->user_name;
+					$token_data['time'] = time();
+/*                $token_data['login_id'] = $mu->login_id;
                 $token_data['user_name'] = $mu->user_name;
                 $token_data['time'] = time();
-
-                $user_token = $this->authorization_token->generateToken($token_data);
+*/
+			$user_token =  $mu->createToken('token-name', ['server:update'])->plainTextToken;;
 
                 $return_data = [
-                    'login_id' => $output->login_id,
-                    'user_name' => $output->user_name,
+                    'login_id' => $mu->login_id,
+                    'user_name' => $mu->user_name,
                     'token' => $user_token,
                 ];
-
                 // Login Success
                 $message = [
                     'status' => true,
@@ -154,9 +168,9 @@ class Merchant_userController extends Controller
               // Login Error
               $message = [
                   'status' => FALSE,
-                  'message' => "Gagal Mendaftar."
+                  'message' => "Gagal Login."
               ];
-              //$this->response()->json($message, RestController::HTTP_NOT_FOUND);
+			  //die( print_r($mu));
           }
 
 
