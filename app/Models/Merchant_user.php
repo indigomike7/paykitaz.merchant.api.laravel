@@ -17,9 +17,10 @@ class Merchant_user extends Model
 		protected $primaryKey = 'merchant_id';
 		public $timestamps = false;
 		
-public function __construct($user = null) {
- //       $this->_db = DB::getInstance(); 
-    }
+public function __construct($user = null) 
+{
+	date_default_timezone_set("Asia/Jakarta");
+}
 		public function userdaftar1(Request $request,$namafiledidb){
 
         $store_name = $request->post('store_name');
@@ -77,7 +78,7 @@ public function __construct($user = null) {
 			//$this->db->where('session_id',$session_id);
             //$this->db->update('merchant_user', $data);
 			
-			$updated=DB::table('merchant_user')->where('session_id',$session_id)->updateorignore(
+			$updated=DB::table('merchant_user')->where('session_id',$session_id)->update(
 			$data
 			);
 			
@@ -91,11 +92,27 @@ public function __construct($user = null) {
 
         $phone_number = $request->post('phone_number');
         $user_name = $request->post('user_name');
-        $session_id = $request->post('session_id');
+        $session_id = $request->post('session_idx');
         $email = $request->post('email');
 		$login_password = $request->post('login_password');
 		$id=0;
 
+		$checkphone = DB::table("merchant_login")->where('phone_number', $phone_number)->get();
+		$checkusername = DB::table("merchant_login")->where('user_name', $user_name)->get();
+		$checkemail = DB::table("merchant_login")->where('email', $email)->get();
+		
+		if(count($checkphone)>0 )
+		{
+			return "No Handphone Sudah Terdaftar";
+		}
+		if(count($checkusername)>0 )
+		{
+			return "Username Sudah Terdaftar";
+		}
+		if(count($checkemail)>0 )
+		{
+			return "Email Sudah Terdaftar";
+		}
         $q = DB::table("merchant_user")->get()->where('session_id', $session_id);
 
         if( $q ) 
@@ -116,7 +133,7 @@ public function __construct($user = null) {
                 'email' => $email,
 				'login_password' => md5($login_password),
 				'merchant_user'=>$id,
-				'registered_date'=>date("Y-m-d H:i:s"),
+				'registered_date'=> date("Y-m-d H:i:s"),
             );
 					$inserted = DB::table('merchant_login')->insertorignore(
 					$data
@@ -124,39 +141,10 @@ public function __construct($user = null) {
             return ($inserted != 1) ? false : true;
 
     }
-    public function userdaftar4(){
+	public function insertlogin()
+	{
+		
+	}
 
-        $phone_number = $request->post('phone_number', true);
-        $user_name = $request->post('user_name', true);
-        $login_password = $request->post('login_password', true);
-        $email = $request->post('email', true);
-
-$this->db->select('merchant_id');
-$this->db->from('merchant_login');
-$query = $this->db->get();  
-
-echo print_r($query);
-
-        //$idpaket = $this->getIdPaket($paket);
-
-        //echo $idpaket;
-
-//        if(!empty($idpaket)){
-            //untuk table pengguna
-            $data = array(
-                'phone_number' => $phone_number,
-                'user_name' => $user_name,
-                'login_password' => md5($login_password),
-                'email' => $email,
-                'merchant_user'=>$merchant_id
-            );
-        
-            $this->db->insert('merchant_login', $data);
-            return true;
-//        }else {
-//            return false;
-//        }
-
-    }
 
 }

@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('daftar', array( 'uses' => 'Merchant_userController@store'));
 Route::post('daftar2', array( 'uses' => 'Merchant_userController@store2'));
 Route::post('daftar3', array('uses' => 'Merchant_userController@store3'));
-Route::post('login', array( 'uses' => 'Merchant_userController@store4'));
+Route::post('login', array( 'uses' => 'Merchant_userController@login'));
 
 
 

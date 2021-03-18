@@ -104,30 +104,32 @@ class Merchant_userController extends Controller
 		$mu = new Merchant_user; 
         $mu = $mu->userdaftar3($request);
 
-          if ($mu)
-          {
-              // Daftar Success
-              $message = [
-                  'status' => true,
-                  'message' => "Anda Telah Berhasil Daftar Toko",
-				  'session_id_reg'=> $mu
-              ];
-              //$this->response()->json($message, RestController::HTTP_OK);
-          } else
+          if (strlen($mu)>1)
           {
               // Login Error
               $message = [
                   'status' => FALSE,
-                  'message' => "Gagal Mendaftar."
+                  'message' => "Gagal Mendaftar Data Login. ",
+				  'error' => $mu
+				  
               ];
-              //$this->response()->json($message, RestController::HTTP_NOT_FOUND);
+          } else
+          {
+              // Daftar Success
+              $message = [
+                  'status' => true,
+                  'message' => "Anda Telah Berhasil Daftar Login Data",
+				  'session_id_reg'=> $mu,
+				  'error' => "no error"
+              ];
+              //$this->response()->json($message, RestController::HTTP_OK);
           }
 
 
         return response()->json($message, 201);
     }
 	
-    public function store4(Request $request)
+    public function login(Request $request)
     {
 		$ul = new UserLogin; 
 		
