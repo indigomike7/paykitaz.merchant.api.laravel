@@ -24,6 +24,7 @@ class Merchant_login extends Authenticatable
         'user_name',
         'email',
         'login_password',
+        'login_id',
     ];
 
     /**

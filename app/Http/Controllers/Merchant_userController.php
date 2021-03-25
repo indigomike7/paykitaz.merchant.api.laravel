@@ -240,6 +240,41 @@ class Merchant_userController extends Controller
 
         return response()->json($message, 201);
     }
+    public function Logout(Request $request)
+    {
+		$ul = new UserLogin; 
+		
+		$login_id = $request->post('login_id');
+		$user_name = $request->post('user_name');
+		$token = $request->post('token');
+		$ml = Merchant_login::where('login_id' , $login_id)->first();
+
+			//$mu = $ul->user_login($request);
+			//die(print_r($mu));
+        if ($ml)
+        {
+			//$user = auth('sanctum')->Merchant_login();
+			$ml->tokens()->delete();;
+					  $message = [
+						  'status' => TRUE,
+						  'message' => "Logout Berhasil"
+					  ];
+				
+			
+          } 
+		  else
+          {
+              // Login Error
+              $message = [
+                  'status' => FALSE,
+                  'message' => "Gagal Logout"
+              ];
+			  //die( print_r($mu));
+          }
+
+        return response()->json($message, 201);
+    }
+	
     public function update(Request $request, Merchant_user $mu)
     {
         $mu->update($request->all());
