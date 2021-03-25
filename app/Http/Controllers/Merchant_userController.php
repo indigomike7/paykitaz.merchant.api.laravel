@@ -7,8 +7,9 @@ use App\Models\Merchant_user;
 use App\Models\UserLogin;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Merchant_login;
+use App\Models\Personal_access_tokens;
 use Illuminate\Support\Facades\Auth;
-
+use Laravel\Sanctum\PersonalAccessToken;
 
 class Merchant_userController extends Controller
 {
@@ -152,7 +153,7 @@ class Merchant_userController extends Controller
                 $token_data['user_name'] = $mu->user_name;
                 $token_data['time'] = time();
 */
-			$user_token =  $mu->createToken('token-name', ['server:update'])->plainTextToken;;
+			$user_token =  $mu->createToken($mu->login_id, ['server:update'])->plainTextToken;
 
                 $return_data = [
                     'login_id' => $mu->login_id,
@@ -171,6 +172,67 @@ class Merchant_userController extends Controller
               $message = [
                   'status' => FALSE,
                   'message' => "Gagal Login."
+              ];
+			  //die( print_r($mu));
+          }
+
+
+        return response()->json($message, 201);
+    }
+    public function checkLoginRedirect(Request $request)
+    {
+		$ul = new UserLogin; 
+		
+		$login_id = $request->post('login_id');
+		$user_name = $request->post('user_name');
+		$token = $request->post('token');
+		$ml = Merchant_login::where('login_id' , $login_id)
+					  ->where( 'user_name' , $user_name)->first();
+
+			//$mu = $ul->user_login($request);
+			//die(print_r($mu));
+        if ($ml)
+        {
+			//$user = auth('sanctum')->Merchant_login();
+			$personalAccessToken = PersonalAccessToken::findToken($token);
+			if (
+       $personalAccessToken) 
+			{
+				if($ml->active!= null || $ml->active!= 0)
+				{
+					  $message = [
+						  'status' => TRUE,
+						  'active'=> TRUE,
+						  'message' => "Sudah Login. Sudah diActivate"
+					  ];
+					  //die( print_r($mu));
+				}
+				else
+				{
+					  $message = [
+						  'status' => TRUE,
+						  'active'=> FALSE,
+						  'message' => "Sudah Login. Belum diActivate"
+					  ];
+					  //die( print_r($mu));
+				}
+			}
+			else
+			{
+					  $message = [
+						  'status' => FALSE,
+						  'active'=> FALSE,
+						  'message' => "Ambil Token Gagal"
+					  ];
+				
+			}
+          } 
+		  else
+          {
+              // Login Error
+              $message = [
+                  'status' => FALSE,
+                  'message' => "Gagal Check Login."
               ];
 			  //die( print_r($mu));
           }
