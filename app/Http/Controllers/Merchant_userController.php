@@ -155,11 +155,25 @@ class Merchant_userController extends Controller
 */
 			$user_token =  $mu->createToken($mu->login_id, ['server:update'])->plainTextToken;
 
+				if($mu->active==1)
+				{
                 $return_data = [
                     'login_id' => $mu->login_id,
                     'user_name' => $mu->user_name,
                     'token' => $user_token,
-                ];
+					'active'=>true
+					];
+				}
+				else
+				{
+					$return_data = [
+                    'login_id' => $mu->login_id,
+                    'user_name' => $mu->user_name,
+                    'token' => $user_token,
+					'active'=>false
+					];
+
+				}
                 // Login Success
                 $message = [
                     'status' => true,
