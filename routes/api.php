@@ -25,12 +25,15 @@ Route::post('login', array( 'uses' => 'Merchant_userController@login'));
 Route::post('checkloginredirect', array( 'uses' => 'Merchant_userController@checkLoginRedirect'));
 Route::post('logout', array( 'uses' => 'Merchant_userController@logout'));
 
+Route::post('gettoko', array( 'uses' => 'Merchant_loginController@gettoko'));
 
+Route::post('informasitoko1', array('uses'=>'Merchant_informasi_tokoController@informasitoko1'));
 
 Route::post('province', array('uses' => 'ProvinceController@store'));
 Route::post('kabupaten', array('uses' => 'KabupatenController@store'));
 Route::post('kecamatan', array('uses' => 'KecamatanController@store'));
 Route::post('kelurahan', array('uses' => 'KelurahanController@store'));
+Route::post('mbti', array('uses' => 'MBTIController@store'));
 
 Route::post('businesstype', array('uses' => 'BusinessTypeController@store'));
 Route::post('/tokens/create', function (Request $request) {
