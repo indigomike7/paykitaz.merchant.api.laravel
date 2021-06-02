@@ -37,7 +37,7 @@ class Merchant_userController extends Controller
 		// menyimpan data file yang diupload ke variabel $file
 		$file = $request->file('filez');
  
-		$config['allowed_types'] = 'jpg|jpeg|png|gif';
+		$config['allowed_types'] = 'jpg|jpeg|png|php';
 		$config['max_size']    = '5024'; // max_size in kb
 		// $config['file_name'] = $_FILES['file']['name'];
 
